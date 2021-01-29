@@ -1,460 +1,271 @@
 //John Ross Leonard
 //CS 372
-//Stack and Queues
+//Infix to Postfix
 
 #include <iostream>
-#include <iomanip>
-#include <fstream>
+#include <cstring>
 #include <string>
+#include <cmath>
+#include <fstream>
 
 using namespace std;
-const int CAP = 20;
-typedef char VT; //type of the element in the array
 
 class List
 {
 private:
-    int mySize;
-    VT aryList[CAP];
+    int mySize;   
     int pos;
-public:
-    List();
-    List(List& aryList);
+public:    
     int CAPACITY;
     int* arr;
-    int currentPos, size1;
-    void clear();
-    void first();
-    void prev();
-    void next();
-    void last();
-    void replace(int, int);
-    void setPos(int);
-    void erase();
-    void insertAfter(int, int);
-    void insertBefore(int, int);
-    int size();
-    bool empty();
-    int getXElement();
-    int getYElement();
-    int getPos();
-
-    List operator= (List& aryList2);
+    int currentPos, size1;    
 };
+
+//stack for postfix
 class Stack
 {
-    int used;
 private:
-    VT aryList2[CAP];    
+    char* list;
+    int size;
+    int index;	
+
 public:
-    Stack() { used = -1; }
-    bool push(char entry,char entry2);
-    VT pop();
-    int peek();
-    bool isEmpty();   
+    Stack(int s)
+    {
+        size = s;
+        list = new char[s];
+        index = -1;
+    }
+    void push(char p)
+    {
+        index++;
+        list[index] = p;
+    }	
+    char peek()
+    {
+        char ret = ' ';
+        if (index > -1)
+        {
+            ret = list[index];
+        }
+        return(ret);
+    }
+    char pop()
+    {
+        char ret = ' ';
+        if (index > -1)
+        {
+            ret = list[index];
+            index--;
+        }
+        return(ret);
+    }   
+    bool isEmpty()
+    {
+        return(index == -1);
+    }	
 };
 
-class Queue
+//evaluation stack
+class StackInt
 {
 private:
-    char* data;
-    int count;
+    int* list;
+    int size;
+    int index;
 public:
-    Queue(int n)
+    StackInt(int s)
     {
-        data = new char[n];
-        count = 0;
+        size = s;
+        list = new int[s];
+        index = -1;
     }
-    int size()
+    void push(int p)
     {
-        return count;
+        index++;
+        list[index] = p;
     }
-    bool empty()
+    int peek()
     {
-        return size() == 0;
-    }
-    void enqueue(char ch)
-    {
-        data[count++] = ch;
-    }
-    char front()
-    {
-        return data[0];
-    }
-    char dequeue() 
-    {
-        char ret = data[0];
-        for (int i = 1; i < count; ++i)
+        int ret = ' ';
+        if (index > -1)
         {
-            data[i - 1] = data[i];
+            ret = list[index];
         }
-        --count;
-        return ret;
+        return(ret);
+    }
+    int pop()
+    {
+        int ret = ' ';
+        if (index > -1)
+        {
+            ret = list[index];
+            index--;
+        }
+        return(ret);
+    }
+    bool isEmpty()
+    {
+        return(index == -1);
+    }
+    int totals()
+    {
+        return(index + 1);
     }
 };
-    
-    bool Stack::push(char item,char item2)
-    {        
-        if (used >= (CAP - 1))
+
+int preoperation(char ch)
+{
+    if (ch == '^')
+    {
+        return 3;
+    }
+    else
+    {
+        if (ch == '*' || ch == '/')
         {
-            cout << "Stack Overflow";
-            
-            system("pause");
-            return 0;
+            return 2;
         }
         else
         {
-            aryList2[++used] = item;
-            cout << item << " pushed into stack\n";
-                return true;
-        }              
-    }
-    VT Stack::pop()
-    {
-        if (used < 0)
-        {
-            cout << "Stack Underflow";
-            return 0;
-        }
-        else
-        {           
-            int x = aryList2[used--];
-            return x;
-        }        
-    }
-    int Stack::peek()
-    {
-        if (used < 0)
-        {
-            cout << "Stack is empty";
-            return 0;
-        }
-        else
-        {            
-            int x = aryList2[used];
-            return x;
+            if (ch == '+' || ch == '-')
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
-    bool Stack::isEmpty()
-    {
-        return(used < 0);
-    }
+}
 
-ostream& operator <<(ostream& outs, List& aryList);
-List operator + (List& ListA, List& ListB);
-bool operator == (List aryList1, List aryList2);
-
-
-List::List()
-{
-    CAPACITY = 20;
-    arr = (int*)malloc(CAPACITY * sizeof(int*));
-    size1 = 0;
-    mySize = 0;
-    currentPos = 0;
-    pos = 0;
-}
-List::List(List& obj)
-{
-    arr = obj.arr;
-    CAPACITY = obj.CAPACITY;
-    size1 = obj.size1;
-    mySize = obj.mySize;
-}
-bool List::empty()
-{
-    return mySize > 0;
-}
-void List::first()
-{
-    pos = 0;
-}
-void List::last()
-{
-    pos = mySize - 1;
-}
-void List::prev()
-{
-    if (currentPos == 0) cout << "Previous element is empty.\n";
-    else
+string intopost(string s)
+{   
+    Stack stack(100);    
+    stack.push('N');
+    int len = s.length();
+    string ret = " ";
+    for (int i = 0; i < len; i++)
     {
-        pos--;
-    }
-}
-void List::next()
-{
-    if (currentPos == CAPACITY - 1) cout << "Next element is empty.\n";
-    else
-    {
-        currentPos++;
-        pos++;
-    }
-}
-int List::getPos()
-{
-    return currentPos;
-}
-void List::setPos(int n)
-{
-    pos = n;
-}
-void List::insertBefore(int a, int b)
-{
-    if (currentPos < CAP)
-    {
-        int i;
-        int n = currentPos + 1;
-
-        for (i = n; i >= pos + 2; i = i - 2)
+        if (s.at(i) >= '0' && s.at(i) <= '9')
         {
-            arr[i] = arr[i - 2];
-            arr[i - 1] = arr[i - 3];
-        }
-        currentPos = currentPos + 2;
-
-        if (pos == 0)
-        {
-            arr[pos] = a;
-            arr[pos + 1] = b;
+            ret += s.at(i);
         }
         else
         {
-            arr[pos - 2] = a;
-            arr[pos - 1] = b;
+            if (s.at(i)=='(')
+            {
+                stack.push('(');
+            }
+            else
+            {
+                if (s.at(i) == ')')
+                {
+                    while (stack.peek() != 'N' && stack.peek() != '(')
+                    {
+                        char c = stack.pop();
+                        ret += c;
+                    }
+                    if (stack.peek() == '(')
+                    {
+                        stack.pop();
+                    }
+                }
+                else
+                {
+                    while (stack.peek() != 'N' && preoperation(s.at(i)) <= preoperation(stack.peek()))
+                    {
+                        char c = stack.pop();
+                        ret += c;
+                    }
+                    stack.push(s.at(i));
+                }
+            }
         }
     }
-
+    while (stack.peek() != 'N')
+    {
+        ret += stack.pop();
+    }
+    return(ret);
 }
-void List::insertAfter(int a, int b)
+
+int evaluatepost(string s)
 {
-    if (pos >= CAPACITY - 1)
-    {
-        cout << "The list is full. Elements have NOT been added.\n";
-        return;
-    }
-    else
-    {
-        for (int i = mySize; i > pos; i--)
-        {
-            arr[i] = arr[i + 1];
-            arr[i + 1] = arr[i + 2];
+    int len = s.length();
+    int ret = 0;
 
-        }
-        if (mySize == 0)
+    StackInt intstack(100);
+    for (int i = 0; i < len; i++)
+    {
+        char ch = s.at(i);
+        if (ch == '^' || ch == '+' || ch == '/' || ch == '*' || ch == '-')
         {
-            arr[pos] = a;
-            arr[pos + 1] = b;
+            int val1 = intstack.pop();
+            int val2 = intstack.pop();
 
+            switch(ch)
+            {
+            case '+':
+            {
+                    intstack.push(val1 + val2);
+                    break;
+            }
+            case '-':
+            {
+                intstack.push(val1 - val2);
+                break;
+            }
+            case '*':
+            {
+                intstack.push(val1 * val2);
+                break;
+            }
+            case '/':
+            {
+                intstack.push(val1 / val2);
+                break;
+            }
+            case'^':
+            {
+                intstack.push(pow(val2, val1));
+                break;
+            }
+
+            }
         }
         else
         {
-            arr[pos + 1] = a;
-            arr[pos + 2] = b;
-            pos++;
-
+            intstack.push((int)(s.at(i) - '0'));
         }
-        mySize++;
+    }
+    ret = intstack.pop();
+    return(ret);
+}
 
-        for (int i = currentPos + 1; i < size1; i++)
-        {
-            arr[i + 2] = arr[i];
-        }
-        arr[currentPos + 1] = a;
-        arr[currentPos + 2] = b;
-        size1++;
-    }
-
-}
-int List::getXElement()
-{
-    if (size() <= 0)
-        return 0;
-    else
-        return arr[pos];
-}
-int List::getYElement()
-{
-    if (size() <= 0)
-        return 0;
-    else
-        return arr[pos + 1];
-}
-int List::size()
-{
-    return mySize;
-}
-void List::replace(int n, int n2)
-{
-    arr[pos] = n;
-    arr[pos + 1] = n2;
-}
-void List::erase()
-{
-    for (int i = pos; i < size1; i++)
-    {
-        arr[i] = arr[i + 1];
-        arr[i + 1] = arr[i + 2];
-    }
-    size1 = size1 - 2;
-}
-void List::clear()
-{
-    mySize = 0;
-    pos = 0;
-    for (int i = 0; i < size1; i++)
-    {
-        arr[i] = 0;
-    }
-    currentPos = 0;
-    size1 = 0;
-}
-ostream& operator<<(ostream& out, List& l)
-{
-    for (int i = 0; i < l.size(); i++)
-    {
-        l.setPos(i);
-        out << l.getXElement() << " ";
-    }
-    out << "\n";
-    return out;
-}
-bool operator == (List l, List l2)
-{
-    if (l.size() != l2.size()) return false;
-    for (int i = 0; i < l.size(); i++)
-    {
-        l.setPos(i);
-        l2.setPos(i);
-        if (l.getXElement() != l.getYElement())
-            return false;
-    }
-    return true;
-}
-List List::operator = (List& l)
-{
-    arr = l.arr;
-    return l;
-}
-bool operator != (List aryList1, List aryList2)
-{
-    if (aryList1 == aryList2)
-        return false;
-    else
-        return true;
-}
-List operator+(List& l, List& l2)
-{
-    cout << "+ operator  ";
-    List l3(l);
-    int orig_pos = l2.getPos();
-    l3.first();
-    l2.first();
-
-    for (int i = 0; i < l2.size(); l2.next(), l3.next(), i++)
-    {
-        l3.replace(l2.getXElement() + l3.getXElement(), l2.getYElement() + l3.getYElement());
-        cout << "+ operator";
-    }
-    l2.setPos(orig_pos);
-    cout << "+ operator ";
-    return l3;
-}
 
 int main()
 {
-    ifstream infile, infile2, infile3;
-    infile3.open("LispClassData.txt");
-    infile2.open("Stack3.dat");
-    infile.open("stackdata.txt");
-    int whichone;
-    string brackets;
-    Stack mystack;
+    ifstream infile;
+    string ex2;
+    infile.open("infixdata.txt");  
 
-    cout << "Which file do you want to check first? 1. Stackdata 2.Stack3 3.LispClassData ";
-    cin >> whichone;
-    while (whichone < 1 || whichone > 3)
-    {
-        cout << "I'm sorry, you didnt enter a correct digit, try again";
-        cin >> whichone;
-    }
-    if (whichone == 1)
-    {
-        char a, b;
-        while(infile>>a)        
-        {
-            if (a == '(' || a == ')' || a == '[' || a == ']' || a == '{' || a == '}' || a == '<' || a == '>')
-            {
-                mystack.push(a, ' ');
-            }
-            getline(infile, brackets);
-            cout << brackets <<endl;
-        }        
-        a = mystack.peek();
-        mystack.pop();
-        mystack.pop();
-        b = mystack.peek();
-        mystack.pop();
-        mystack.pop();
-        cout << "This data is equal" << endl;
-    }
-    if (whichone == 2)
-    {
-        char a, b;
-        while(infile2>>a)       
-        {
-            if (a == '(' || a == ')' || a == '[' || a == ']' || a == '{' || a == '}' || a == '<' || a == '>')
-            {
-                mystack.push(a,' ');
-            }            
-            cout << brackets << endl;
+        while (!infile.eof())
+        {           
+            getline(infile, ex2);           
+            string postFix1 = intopost(ex2);
+            cout << ex2 << endl;
+            cout << "Postfix : " << postFix1;
+            cout << "\nValue is : " << evaluatepost(postFix1) << endl << endl;
         }
-        
-        a = mystack.peek();
-        mystack.pop();
-        mystack.pop();
-        b = mystack.peek();
-        mystack.pop();
-        mystack.pop();
-    }
-    if (whichone == 3)
-    {
-        char a, b;
-        while(infile3>>a)      
+        if (infile.eof())
         {
-            if (a == '(' || a == ')' || a == '[' || a == ']' || a == '{' || a == '}' || a == '<' || a == '>')
-            {
-                mystack.push(a, ' ');
-            }            
-        }
-        
-        a = mystack.peek();
-        mystack.pop();
-        mystack.pop();
-        b = mystack.peek();
-        mystack.pop();
-        mystack.pop();
-        cout << a << b << endl;
-    }   
-    
-   Queue suitor(100);
-    char ch = 'A', temp;
-    for (int i = 0; i < 65; ++i)
-    {
-        suitor.enqueue(ch);
-        ch += 1;
-    }
-    while (suitor.size() != 1)
-    {
-        temp = suitor.dequeue();
-        suitor.enqueue(temp);
-        temp = suitor.dequeue();
-        suitor.enqueue(temp);
-        suitor.dequeue();
-        suitor.enqueue(temp);
-        suitor.dequeue();
-    }
-    cout << "Remaining Person is: " << suitor.front() << endl;
-    
-    system("Pause");
-    return 0;
+            cout << "End of program" << endl;
+            system("pause");
+            return 0;
+        }    
+   
+	system("pause");
+	return 0;
 }
