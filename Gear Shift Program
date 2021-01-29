@@ -1,0 +1,391 @@
+#include <iostream>
+#include <iomanip>
+#include <cctype>
+#include <stdio.h>
+
+using namespace std;
+
+class throttle
+{
+private:
+	int Top_Position;
+	int position;
+	int bottompos;
+
+
+public:
+	void settop(int v)
+	{
+		Top_Position = v;
+	}
+	void setbottom(int v)
+	{
+		bottompos = v;
+	}
+	void setcurrent()
+	{
+		position = bottompos;
+	}
+	void inc(int v)
+	{
+		position = position+v;
+	}
+	void dec(int v)
+	{
+		position = position+v;
+	}
+	int currentpos()
+	{
+		return position;
+	}
+	void display()
+	{
+		cout << position;
+	}
+	void shut_Off()
+	{
+		position = 0;
+	}	
+
+};
+
+int main()
+{
+	int vehicle, howmany;
+	char ans, a;
+	throttle car, truck,shuttle;
+	car.settop(6);
+	car.setbottom(0);
+	truck.settop(30);
+	truck.setbottom(0);
+	shuttle.settop(20);
+	shuttle.setbottom(6);
+	car.setcurrent();
+	truck.setcurrent();
+	shuttle.setcurrent();
+
+	cout << "Which vehicle are we dealing with? 1.Car 2.Truck 3.Shuttle ?";
+	cin >> vehicle;
+	if (vehicle < 1 || vehicle > 3)
+	{
+		cout << "I'm sorry, you didnt enter a valid number. Try again.";
+		system("pause");
+		return 0;
+	}
+	
+	switch (vehicle)
+	{
+	case 1: cout << "Current position is " << car.currentpos() << ", use negative numbers to decrease, and positive numbers to increase.";
+		cin >> howmany;
+		if (howmany > 0)
+		{		
+			
+			if (car.currentpos() + howmany <6)
+			{
+				car.inc(howmany);				
+				cout << "Car is now in position: " << car.currentpos() << " ";
+				cout << "Keep shifting? Y or N? ";
+				cin >> ans;				
+				ans=toupper(ans);				
+				if (ans != 'Y'&& ans != 'N')
+				{
+					cout << "You've entered a digit I don't recognize, try again.";
+					system("pause");
+					return 0;
+				}
+				while (toupper(ans) == 'Y')
+				{
+					if (car.currentpos() == 6)
+					{						
+						cout << "The throttle's in the maximum position of " << car.currentpos() << " please shift down.";
+						cout << "Car is now in position: " << car.currentpos() << " ";
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+						cin >> howmany;
+						car.dec(howmany);
+						cout << "Car is now in position: " << car.currentpos();
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+						cin >> howmany;
+
+						if (howmany > 0 && car.currentpos() + howmany < 7)
+						{
+							car.inc(howmany);
+							cout << "Car is now in position: " << car.currentpos() << " ";
+							cout << "Keep shifting? Y or N? ";
+							cin >> ans;
+							ans = toupper(ans);
+						}
+
+						if (howmany < 0 && car.currentpos() - howmany>0)
+						{
+							cout << "hi";
+							if (car.currentpos() - howmany >= 0)
+							{
+								car.dec(howmany);
+								cout << "Car is now in position: " << car.currentpos();
+								cout << "Keep shifting? Y or N? ";
+								cin >> ans;
+								ans = toupper(ans);
+							}
+						}
+					}
+
+					cout << "1. Current position is " << car.currentpos() << ", use negative numbers to decrease, and positive numbers to increase.";
+					cin >> howmany;
+
+					if (howmany > 0 && car.currentpos() + howmany < 7)
+					{						
+							car.inc(howmany);							
+							cout << "1. Car is now in position: " << car.currentpos() << " ";
+							cout << "Keep shifting? Y or N? ";
+							cin >> ans;
+							ans = toupper(ans);						
+					}
+
+					if (howmany < 0 && car.currentpos() - howmany>0)
+					{						
+						if (car.currentpos() + howmany >= 0)
+						{
+							
+							car.dec(howmany);
+							cout << "2.Car is now in position: " << car.currentpos();
+							cout << "Keep shifting? Y or N? ";
+							cin >> ans;
+							ans = toupper(ans);
+						}
+					}
+
+					if (ans == 'N')
+					{
+						cout << "Car is in position " << car.currentpos();
+					}
+				}				
+			system("pause");
+		return 0;
+				}
+
+				if (howmany < 0)
+				{
+					if (car.currentpos() - howmany >= 0)
+					{
+						car.dec(howmany);
+						cout << "Car is now in position: " << car.currentpos();
+					}
+				}
+			}
+
+		break;
+
+	case 2: cout << "Current position is " << truck.currentpos() << ", use negative numbers to decrease, and positive numbers to increase.";
+		cin >> howmany;
+		if (howmany > 0)
+		{
+
+			if (truck.currentpos() + howmany <30)
+			{
+				truck.inc(howmany);
+				cout << "Truck is now in position: " << truck.currentpos() << " ";
+				cout << "Keep shifting? Y or N? ";
+				cin >> ans;
+				ans = toupper(ans);
+
+				if (ans != 'Y'&& ans != 'N')
+				{
+					cout << "You've entered a digit I don't recognize, try again.";
+					system("pause");
+					return 0;
+				}
+
+				while (toupper(ans) == 'Y')
+				{
+					if (truck.currentpos() == 30)
+					{
+						cout << "The throttle's in the maximum position of " << truck.currentpos() << " please shift down.";
+						cout << "Truck is now in position: " << truck.currentpos() << " ";
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+						cin >> howmany;
+						truck.dec(howmany);
+						cout << "Truck is now in position: " << truck.currentpos();
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+						cin >> howmany;
+						if (howmany > 0 && truck.currentpos() + howmany < 31)
+						{
+							truck.inc(howmany);
+							cout << "Truck is now in position: " << truck.currentpos() << " ";
+							cout << "Keep shifting? Y or N? ";
+							cin >> ans;
+							ans = toupper(ans);
+
+						}
+						if (howmany < 0 && truck.currentpos() - howmany>0)
+						{							
+							if (truck.currentpos() - howmany >= 0)
+							{
+								truck.dec(howmany);
+								cout << "Truck is now in position: " << truck.currentpos();
+								cout << "Keep shifting? Y or N? ";
+								cin >> ans;
+								ans = toupper(ans);
+							}
+						}
+					}
+
+					cout << "Current position is " << truck.currentpos() << ", use negative numbers to decrease, and positive numbers to increase.";
+					cin >> howmany;
+
+					if (howmany > 0 && truck.currentpos() + howmany < 31)
+					{
+						truck.inc(howmany);
+						cout << "Truck is now in position: " << truck.currentpos() << " ";
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+					}
+
+					if (howmany < 0 && truck.currentpos() - howmany>0)
+					{
+						if (truck.currentpos() + howmany >= 0)
+						{
+							truck.dec(howmany);
+							cout << "Truck is now in position: " << truck.currentpos();
+							cout << "Keep shifting? Y or N? ";
+							cin >> ans;
+							ans = toupper(ans);
+						}
+					}
+
+					if (ans == 'N')
+					{
+						cout << "Truck is in position " << truck.currentpos();
+					}
+				}
+				system("pause");
+				return 0;
+			}
+
+			if (howmany < 0)
+			{
+				if (truck.currentpos() - howmany >= 0)
+				{
+					truck.dec(howmany);
+					cout << "Truck is now in position: " << truck.currentpos();
+				}
+			}
+		}
+
+		break;
+
+	case 3: cout << "Current position is " << shuttle.currentpos() << ", use negative numbers to decrease, and positive numbers to increase.";
+
+		cin >> howmany;
+
+		if (howmany > 0)
+		{
+
+			if (shuttle.currentpos() + howmany <20)
+			{
+				shuttle.inc(howmany);
+				cout << "Shuttle is now in position: " << shuttle.currentpos() << " ";
+				cout << "Keep shifting? Y or N? ";
+				cin >> ans;
+				ans = toupper(ans);
+
+				if (ans != 'Y'&& ans != 'N')
+				{
+					cout << "You've entered a digit I don't recognize, try again.";
+					system("pause");
+					return 0;
+				}
+
+				while (toupper(ans) == 'Y')
+				{
+					if (shuttle.currentpos() == 20)
+					{
+						cout << "The throttle's in the maximum position of " << shuttle.currentpos() << " please shift down.";
+						cout << "Shuttle is now in position: " << shuttle.currentpos() << " ";
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+						cin >> howmany;
+						shuttle.dec(howmany);
+						cout << "Shuttle is now in position: " << shuttle.currentpos();
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+						cin >> howmany;
+						if (howmany > 0 && shuttle.currentpos() + howmany < 21)
+						{
+							shuttle.inc(howmany);
+							cout << "Shuttle is now in position: " << shuttle.currentpos() << " ";
+							cout << "Keep shifting? Y or N? ";
+							cin >> ans;
+							ans = toupper(ans);
+
+						}
+						if (howmany < 0 && car.currentpos() - howmany>0)
+						{
+							cout << "hi";
+							if (shuttle.currentpos() - howmany >= 0)
+							{
+								shuttle.dec(howmany);
+								cout << "Shuttle is now in position: " << car.currentpos();
+								cout << "Keep shifting? Y or N? ";
+								cin >> ans;
+								ans = toupper(ans);
+							}
+						}
+					}
+					cout << "Current position is " << shuttle.currentpos() << ", use negative numbers to decrease, and positive numbers to increase.";
+					cin >> howmany;
+					if (howmany > 0 && shuttle.currentpos() + howmany < 21)
+					{
+						shuttle.inc(howmany);
+						cout << "Shuttle is now in position: " << shuttle.currentpos() << " ";
+						cout << "Keep shifting? Y or N? ";
+						cin >> ans;
+						ans = toupper(ans);
+
+					}
+					if (howmany < 0 && shuttle.currentpos() - howmany>0)
+					{
+						if (shuttle.currentpos() + howmany >= 0)
+						{
+
+							shuttle.dec(howmany);
+							cout << "Shuttle is now in position: " << shuttle.currentpos();
+							cout << "Keep shifting? Y or N? ";
+							cin >> ans;
+							ans = toupper(ans);
+						}
+					}
+					if (ans == 'N')
+					{
+						cout << "Shuttle is in position " << shuttle.currentpos();
+					}
+				}
+				system("pause");
+				return 0;
+			}
+			if (howmany < 0)
+			{
+				if (shuttle.currentpos() - howmany >= 0)
+				{
+					shuttle.dec(howmany);
+					cout << "Shuttle is now in position: " << shuttle.currentpos();
+				}
+			}
+		}
+		break;
+	}
+	
+
+	system("pause");
+	return 0;
+}
