@@ -1,0 +1,33 @@
+#include <iostream>	
+
+using namespace std;
+
+int hailstone(int n,int count)
+{			
+	if (n == 1)		
+		return count;		
+	if (n % 2 == 0)
+	{			
+		n = n / 2;
+		count++;			
+	}
+	else
+	{	
+		n = (3 * n) + 1;
+		count++;		
+	}	
+	hailstone(n,count);	
+}
+
+int main()
+{
+	int userin, count;
+	count = 0;
+	cout << "Enter the digit please: ";
+	cin >> userin;
+	int final;
+	final = hailstone(userin,count);
+	cout << "It took " << final << " iterations of the recursion to get the digit down to 1" << endl;
+	system("pause");
+	return 0;
+}
