@@ -1,0 +1,25 @@
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+double milestraversed(int minutes)
+{
+	double miles;
+	if (minutes <= 5)	
+		miles = 0.87;
+	else
+	{
+		miles = (0.87 - 0.029) + milestraversed(minutes - 5);
+	}
+	cout << minutes << "\t\t\t" <<setprecision(3)<< miles << endl;
+	return miles;
+}
+
+int main()
+{
+	cout << "Minutes \t\t Miles" << endl;
+	milestraversed(60);
+	system("pause");
+	return 0;
+}
