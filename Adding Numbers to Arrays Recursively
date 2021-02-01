@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+
+// (write a function to fill an array of size 32 with values 1 to 32 recursively
+void fillingary(int *ptr,int s,int value)
+{	
+	if (s == 0)	
+		return;	
+	else
+	{
+		*ptr = value;
+		cout << *ptr << " ";
+		fillingary(++ptr, s-1, value+1);		
+	}
+}
+
+// (write a function to fill an array of size 32 with values 32 to 1 recursively
+void fillingary2(int* ptr, int s, int value)
+{		
+	if (s == 0)
+		return;
+	else
+	{
+		*ptr = value;
+		cout << *ptr << " ";
+		fillingary2(++ptr, s - 1, value-1);
+	}
+}
+
+// (write a function to fill an array of size 13 with values 1 TO 13, STARTING IN THE MIDDLE recursively
+void fillingary3(int* ptr, int s, int value)
+{
+	if (s == 0)
+		return;
+	if (s > 8)
+	{	
+		*ptr = value;
+		cout << *ptr << " ";
+		fillingary3(++ptr, s - 1, value - 2);
+	}
+	if (s == 8)
+	{
+		*ptr = value;
+		cout << *ptr << " ";
+		fillingary3(++ptr, s - 1, value -2 );
+	}
+	if (s ==7)
+	{
+		*ptr = value;
+		cout << *ptr << " ";
+		fillingary3(++ptr, s - 1, value +1 );
+	}	
+	if (s < 7)
+	{
+		*ptr = value;
+		cout << *ptr << " ";
+		fillingary3(++ptr, s - 1, value + 2);
+	}	
+}
+
+int main()
+{
+	int* p;
+	int* p2;
+	int* p3;
+	int ary[32];
+	int ary2[32];
+	int ary3[13];
+	int size1 = 32;
+	int size2 = 13;
+	int val = 1;
+	int val2 = 32;
+	int val3 = 13;
+	p = ary;
+	p2 = ary2;
+	p3 = ary3;
+
+	
+	cout << endl << "We will now fill the ary starting with digit 1, all the way to 32: " << endl;
+	fillingary(p, size1,val);
+	
+	cout << endl<< "We will now fill the ary starting with digit 32: " << endl;
+	fillingary2(p2, size1, val2);
+	
+	cout << endl << "We will now fill the ary starting with digit 1 in the middle: " << endl;
+	fillingary3(p2, size2, val3);
+
+	system("pause");
+	return 0;
+}
