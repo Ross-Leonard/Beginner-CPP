@@ -1,6 +1,4 @@
-//John Ross Leonard
-//CS 372
-//Tree Work Out Program
+
 
 #include <iostream>
 #include <fstream>
