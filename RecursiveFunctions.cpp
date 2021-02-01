@@ -1,6 +1,4 @@
-//John Ross Leonard
-//CS 372
-//Number 2 on worksheet, multiple programs
+
 
 #include <iostream>
 using namespace std;
