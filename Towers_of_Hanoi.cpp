@@ -1,7 +1,3 @@
-//John Ross Leonard
-//CS 372
-//Towers of Hanoi
-
 #include <iostream>
 #include <stdlib.h>
 #include <iomanip>
